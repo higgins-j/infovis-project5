@@ -36,6 +36,7 @@ var valueline = d3.svg
 var svg = d3
   .select("body")
   .append("svg")
+  .attr("id", "budgetNgross")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -46,6 +47,7 @@ d3.csv("movies.csv", function(error, data) {
   data.forEach(function(d) {
     d.gross = Number(d.gross);
     d.budget = Number(d.budget);
+    d.movieTitle = String(d.movie_title);
   });
 
   // Scale the range of the data
@@ -61,6 +63,13 @@ d3.csv("movies.csv", function(error, data) {
     })
   ]);
 
+  var tooltip = d3
+    .select("body")
+    .append("div")
+    .attr("id", "info")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .text("Movie title: ");
   // Add the valueline path.
   svg
     .selectAll("circle")
@@ -71,7 +80,10 @@ d3.csv("movies.csv", function(error, data) {
       return i;
     })
     .attr("class", "circle")
-    .attr("stroke", "black")
+    .attr("fill", function(d) {
+      return "black";
+    })
+    .attr("fill-opacity", 0.5)
     .attr("cx", function(d) {
       return x(d.budget);
     })
@@ -80,7 +92,29 @@ d3.csv("movies.csv", function(error, data) {
     })
     .attr("r", 1)
     .attr("pointer-events", "all")
-    .on("click", function(d, i) {});
+    .on("click", function(d, i) {
+      var text = "Movie title: " + d.movieTitle;
+      reset();
+      var selected = d3
+        .select("#budgetNgross")
+        .selectAll("circle")
+        .filter(function(_d, k) {
+          return k === i;
+        });
+      selected
+        .attr("fill", "red")
+        .attr("r", 3)
+        .attr("fill-opacity", 1);
+      tooltip.text(text);
+    });
+
+  function reset() {
+    var circles = d3.selectAll("circle");
+    circles
+      .attr("fill", "black")
+      .attr("r", 1)
+      .attr("fill-opacity", 0.5);
+  }
 
   // Add the X Axis
   svg
