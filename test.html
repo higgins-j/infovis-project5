@@ -35,7 +35,7 @@
     name="updateButton"
     type="button"
     value="Reset"
-    onclick="updateDataX(true)"
+    onclick="document.getElementById('filterAxisX').value = ''; updateDataX(true);"
   />
   <div id="option">
         <p>Filter for y axis:
@@ -50,7 +50,7 @@
         name="updateButton"
         type="button"
         value="Reset"
-        onclick="updateDataY(true)"
+        onclick="document.getElementById('filterAxisY').value = ''; updateDataY(true);"
       />
     </p>
   </div>

@@ -3,6 +3,8 @@ var margin = { top: 50, right: 50, bottom: 50, left: 100 },
   width = 600 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
 
+var paddingY = -180;
+var paddingX = -120;
 // Set the ranges
 var x = d3.scale.linear().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
@@ -92,6 +94,24 @@ d3.csv("movies.csv", function(error, data) {
     .append("g")
     .attr("class", "y axis")
     .call(yAxis);
+
+  svg
+    .append("text")
+    .attr("text-anchor", "middle") // this makes it easy to centre the text as the transform is applied to the anchor
+    .attr(
+      "transform",
+      "translate(" + paddingY / 2 + "," + height / 2 + ")rotate(-90)"
+    ) // text is drawn off the screen top left, move down and out and rotate
+    .text("Gross");
+
+  svg
+    .append("text")
+    .attr("text-anchor", "middle") // this makes it easy to centre the text as the transform is applied to the anchor
+    .attr(
+      "transform",
+      "translate(" + width / 2 + "," + (height - paddingX / 3) + ")"
+    ) // centre below axis
+    .text("Budget");
 });
 
 // ** Update data section (Called from the onclick)
@@ -104,13 +124,15 @@ function updateDataX(reset = false) {
     });
 
     // Scale the range of the data again
-    if (!reset) x.domain([0, d3.select("#filterAxisX").node().value]);
-    else
+    if (!reset) {
+      x.domain([0, d3.select("#filterAxisX").node().value]);
+    } else {
       x.domain(
         d3.extent(data, function(d) {
           return d.budget;
         })
       );
+    }
     // Select the section we want to apply our changes to
     var svg = d3.select("body").transition();
     // Make the changes
