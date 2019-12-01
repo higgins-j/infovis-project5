@@ -1,5 +1,5 @@
 var width = 1200;
-var height = 300;
+var height = 1200;
 var padding = {t: 0, r: 0, b: 0, l: 0};
 var chartPadding = {t: 40, r: 40, b: 60, l: 50};
 
@@ -22,8 +22,8 @@ var labels = {
 
 var numAttributes = attributes.length;
 
-var chartWidth = svgAvailableWidth / numAttributes;
-var chartHeight = svgAvailableHeight;
+var chartWidth = svgAvailableWidth;
+var chartHeight = svgAvailableHeight /4;
 
 var chartAvailableWidth = chartWidth - chartPadding.l - chartPadding.r;
 var chartAvailableHeight = chartHeight - chartPadding.t - chartPadding.b;
@@ -45,6 +45,7 @@ var brush = d3.brush()
    .on("end", brushEnd);
 
 function brushStart(attribute) {
+	document.getElementById('text').innerHTML ="";
     if (selectedChart !== attribute) {
         brush.move(d3.selectAll('.brush'), null);
     }
@@ -67,9 +68,10 @@ function brushMove(attribute) {
                 var x = xScale(d[attribute]) + chartPadding.l;
                 var y = yScale(d['gross']) + chartPadding.t;
                 if (left <= x && x <= right && top <= y && y <= bottom) {
-                    console.log(d);
+					//get values of all movies selected here
+                    return true;
                 }
-                return (left <= x && x <= right && top <= y && y <= bottom);
+				return false;
             });
     }
 }
@@ -86,6 +88,7 @@ d3.csv("movies.csv", function(csv) {
     for (var i=0; i<csv.length; ++i) {
 		csv[i].director = String(csv[i].director_name);
 		csv[i].duration = Number(csv[i].duration);
+		csv[i].title = String(csv[i].movie_title);
 		csv[i].directorLikes = Number(csv[i].director_facebook_likes);
 		csv[i].actor1Likes = Number(csv[i].actor_1_facebook_likes);
         csv[i].actor2Likes = Number(csv[i].actor_2_facebook_likes);
