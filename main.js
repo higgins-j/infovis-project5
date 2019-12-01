@@ -1,5 +1,5 @@
 var width = 1200;
-var height = 1200;
+var height = 300;
 var padding = {t: 0, r: 0, b: 0, l: 0};
 var chartPadding = {t: 40, r: 40, b: 60, l: 50};
 
@@ -22,8 +22,8 @@ var labels = {
 
 var numAttributes = attributes.length;
 
-var chartWidth = svgAvailableWidth;
-var chartHeight = svgAvailableHeight /4;
+var chartWidth = svgAvailableWidth  / numAttributes;
+var chartHeight = svgAvailableHeight;
 
 var chartAvailableWidth = chartWidth - chartPadding.l - chartPadding.r;
 var chartAvailableHeight = chartHeight - chartPadding.t - chartPadding.b;
