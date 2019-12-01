@@ -23,12 +23,36 @@
 </style>
 <body>
   <div id="option">
+    <p>Filter for x axis:
+    <input id="filterAxisX"></input>
     <input
       name="updateButton"
       type="button"
-      value="Update"
-      onclick="updateData()"
+      value="Filter"
+      onclick="updateDataX()"
     />
+    <input
+    name="updateButton"
+    type="button"
+    value="Reset"
+    onclick="updateDataX(true)"
+  />
+  <div id="option">
+        <p>Filter for y axis:
+        <input id="filterAxisY"></input>
+        <input
+          name="updateButton"
+          type="button"
+          value="Filter"
+          onclick="updateDataY()"
+        />
+        <input
+        name="updateButton"
+        type="button"
+        value="Reset"
+        onclick="updateDataY(true)"
+      />
+    </p>
   </div>
 
   <!-- load the d3.js library -->

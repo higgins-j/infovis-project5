@@ -1,5 +1,5 @@
 // Set the dimensions of the canvas / graph
-var margin = { top: 30, right: 20, bottom: 30, left: 50 },
+var margin = { top: 50, right: 50, bottom: 50, left: 100 },
   width = 600 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
 
@@ -95,7 +95,7 @@ d3.csv("movies.csv", function(error, data) {
 });
 
 // ** Update data section (Called from the onclick)
-function updateData() {
+function updateDataX(reset = false) {
   // Get the data again
   d3.csv("movies.csv", function(error, data) {
     data.forEach(function(d) {
@@ -104,7 +104,13 @@ function updateData() {
     });
 
     // Scale the range of the data again
-    x.domain([0, 100000000]);
+    if (!reset) x.domain([0, d3.select("#filterAxisX").node().value]);
+    else
+      x.domain(
+        d3.extent(data, function(d) {
+          return d.budget;
+        })
+      );
     // Select the section we want to apply our changes to
     var svg = d3.select("body").transition();
     // Make the changes
@@ -122,5 +128,41 @@ function updateData() {
       .select(".x.axis") // change the x axis
       .duration(750)
       .call(xAxis);
+  });
+}
+
+function updateDataY(reset = false) {
+  // Get the data again
+  d3.csv("movies.csv", function(error, data) {
+    data.forEach(function(d) {
+      d.gross = Number(d.gross);
+      d.budget = Number(d.budget);
+    });
+
+    // Scale the range of the data again
+    if (!reset) y.domain([0, d3.select("#filterAxisY").node().value]);
+    else
+      y.domain(
+        d3.extent(data, function(d) {
+          return d.gross;
+        })
+      );
+    // Select the section we want to apply our changes to
+    var svg = d3.select("body").transition();
+    // Make the changes
+    d3.select("body")
+      .transition()
+      .duration(750)
+      .selectAll("circle")
+      .attr("cx", function(d) {
+        return x(d.budget);
+      })
+      .attr("cy", function(d) {
+        return y(d.gross);
+      });
+    svg
+      .select(".y.axis") // change the x axis
+      .duration(750)
+      .call(yAxis);
   });
 }
