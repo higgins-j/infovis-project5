@@ -1,5 +1,5 @@
-var width = 2000;
-var height = 500;
+var width = 1000;
+var height = 1000;
 var padding = {t: 0, r: 0, b: 0, l: 0};
 var chartPadding = {t: 40, r: 40, b: 60, l: 50};
 
@@ -22,8 +22,8 @@ var labels = {
 
 var numAttributes = attributes.length;
 
-var chartWidth = svgAvailableWidth  / numAttributes;
-var chartHeight = svgAvailableHeight;
+var chartWidth = svgAvailableWidth  / 2;
+var chartHeight = svgAvailableHeight / 2;
 
 var chartAvailableWidth = chartWidth - chartPadding.l - chartPadding.r;
 var chartAvailableHeight = chartHeight - chartPadding.t - chartPadding.b;
@@ -110,7 +110,18 @@ d3.csv("movies.csv", function(csv) {
             return d;
         })
         .attr('transform', function(d, i) {
-				return `translate(${padding.l+(i * chartWidth)}, ${padding.t})`
+				if (i == 0) {
+					return `translate(${padding.l}, ${padding.t})`
+				}
+				if (i == 1) {
+					return `translate(${padding.l+chartWidth}, ${padding.t})`
+				}
+				if (i == 2) {
+					return `translate(${padding.l}, ${padding.t + chartHeight})`
+				}
+				if (i == 3) {
+					return `translate(${padding.l+chartWidth}, ${padding.t + chartHeight})`
+				}
 			});
 
     chartEnter.append('g')
