@@ -10,7 +10,7 @@ body {
 }
 .selected {
 	stroke: red;
-	fill:red;
+	fill:red !important;
 }
 .selected2 {
 	stroke: orange;
@@ -25,4 +25,8 @@ path.domain {
 	fill-opacity: .1;
 	stroke: #fff;
 	shape-rendering: crispEdges;
+}
+
+.dot {
+    fill: white;
 }

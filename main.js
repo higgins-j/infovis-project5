@@ -1,5 +1,5 @@
-var width = 1200;
-var height = 300;
+var width = 2000;
+var height = 500;
 var padding = {t: 0, r: 0, b: 0, l: 0};
 var chartPadding = {t: 40, r: 40, b: 60, l: 50};
 
@@ -71,7 +71,7 @@ function brushMove(attribute) {
 					//get values of all movies selected here
                     return true;
                 }
-				return false;
+				return left <= x && x <= right && top <= y && y <= bottom;
             });
     }
 }
@@ -137,7 +137,7 @@ d3.csv("movies.csv", function(csv) {
             .append('circle')
             .attr('class', 'dot')
             .style('stroke', 'black')
-            .attr('r', 5);
+            .attr('r', 3);
 
         dots.merge(dotsEnter)
         .attr('cx', function(csv) {
@@ -159,5 +159,23 @@ d3.csv("movies.csv", function(csv) {
 			.attr('class', '.y.axis')
             .attr('transform', `translate(${chartPadding.l}, ${chartPadding.t})`)
 			.call(yAxis);
+
+		chart.append('text')
+			.text(function(d) {
+				return labels[d];
+			})
+			.attr('class', 'axis-label')
+				.attr('transform', function(d, i) {
+					return `translate(${chartPadding.l * 2}, ${chartHeight - (chartPadding.b / 2) + 10})`;
+				});
+
+		chart.append('text')
+			.text(function(d) {
+				return 'Gross';
+			})
+			.attr('class', 'axis-label')
+			.attr('transform', function(d, i) {
+				return `rotate(90) translate(${chartHeight / 3}, 40)`;
+			});
     });
 });
