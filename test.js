@@ -81,16 +81,18 @@ d3.csv("movies.csv", function(error, data) {
     })
     .attr("class", "circle")
     .attr("fill", function(d) {
+      return "white";
+    })
+    .attr("stroke", function(d) {
       return "black";
     })
-    .attr("fill-opacity", 0.5)
     .attr("cx", function(d) {
       return x(d.budget);
     })
     .attr("cy", function(d) {
       return y(d.gross);
     })
-    .attr("r", 1)
+    .attr("r", 3)
     .attr("pointer-events", "all")
     .on("click", function(d, i) {
       var text = "Movie title: " + d.movieTitle;
@@ -104,16 +106,16 @@ d3.csv("movies.csv", function(error, data) {
       selected
         .attr("fill", "red")
         .attr("r", 3)
-        .attr("fill-opacity", 1);
+        .attr("stroke", "black");
       tooltip.text(text);
     });
 
   function reset() {
     var circles = d3.selectAll("circle");
     circles
-      .attr("fill", "black")
-      .attr("r", 1)
-      .attr("fill-opacity", 0.5);
+      .attr("fill", "white")
+      .attr("stroke", "black")
+      .attr("r", 3);
   }
 
   // Add the X Axis
