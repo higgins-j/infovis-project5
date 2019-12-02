@@ -1,0 +1,32 @@
+body {
+  font: 12px sans-serif;
+}
+.tick > line {
+	fill: none;
+	stroke: black;
+}
+.tick > text {
+	fill: black;
+}
+.selected {
+	stroke: red;
+	fill:red !important;
+}
+.selected2 {
+	stroke: orange;
+	fill:orange;
+}
+path.domain {
+	fill: none;
+	stroke-width: 2px;
+	stroke: black;
+}
+.brush .extent {
+	fill-opacity: .1;
+	stroke: #fff;
+	shape-rendering: crispEdges;
+}
+
+.dot {
+    fill: white;
+}
