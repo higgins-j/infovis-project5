@@ -91,6 +91,7 @@ function brushMove(attribute) {
 }
 
 function brushEnd(attribute) {
+<<<<<<< HEAD
   var selection = d3.event.selection;
   if (!selection) {
     selectedChart = undefined;
@@ -143,6 +144,95 @@ function createPieChart(selection, attribute) {
     }
   }
   draw_word_cloud(frequency_list);
+=======
+    var selection = d3.event.selection;
+    if (!selection) {
+        selectedChart = undefined;
+        svg.selectAll('.dot').classed('selected', false);
+		d3.select("#chartSpot").html("");
+    } else {
+		createPieChart(selection, attribute);
+	}
+}
+
+function createPieChart(selection, attribute) {
+	d3.select("#chartSpot").html("");
+	var [[left, top], [right, bottom]] = selection;
+	var movies = new Array();
+	genreMap = new Map();
+	var dots = svg.selectAll('.dot').classed('selected', function(d) {
+		var x = xScale(d[attribute]) + chartPadding.l;
+		var y = yScale(d['gross']) + chartPadding.t;
+		if (left <= x && x <= right && top <= y && y <= bottom) {
+			//get values of all movies selected here
+			var contains = 0;
+			for (i = 0; i < movies.length; i++) {
+				if (movies[i].title == d.title) {
+					contains = 1;
+				}
+			}
+			if (contains == 0) {
+				movies.push(d);
+			}
+		}
+		return left <= x && x <= right && top <= y && y <= bottom;
+	});
+	for (i = 0; i < movies.length; i++) {
+		var splits = movies[i].genres.split('|');
+		for (j = 0; j < splits.length; j++) {
+			if (genreMap.has(splits[j])) {
+				var newNumber = genreMap.get(splits[j]) + 1;
+				genreMap.delete(splits[j]);
+				genreMap.set(splits[j], newNumber);
+			} else {
+				genreMap.set(splits[j], 1);
+			}
+		}
+	}
+	var pieWidth = 500;
+	var pieHeight = 500;
+	var pieRadius = 225;
+	chartSpot = d3.select("#chartSpot").append("svg")
+			.attr("width", pieWidth)
+			.attr("height", pieHeight)
+			.append("g")
+			.attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
+	var color = d3.scaleOrdinal(d3.schemeSet2);
+	var pie = d3.pie();
+	var dataReady = pie(Array.from(genreMap.values()));
+	console.log(dataReady);
+	var arcGenerator = d3.arc()
+		.innerRadius(0)
+		.outerRadius(pieRadius)
+
+	chartSpot.selectAll('arc')
+		.data(dataReady)
+		.enter()
+		.append('path')
+			.attr('d', arcGenerator)
+			.attr('fill', function(d,i) {
+				return color(i);
+			})
+			.style("stroke", "black")
+			.style("stroke-width", "2px");
+
+	chartSpot.selectAll('arc')
+		.data(dataReady)
+		.enter()
+		.append('text')
+		.text(function(d,i) {
+			return Array.from(genreMap.keys())[i];
+		})
+		.each(function(d, i) {
+			var centroid = arcGenerator.centroid(d);
+			d3.select(this)
+				.attr('x', centroid[0])
+				.attr('y', centroid[1])
+				.attr('dy', '0.33em');
+		})
+		.style("text-anchor", "middle")
+		.style("font-size", 12);
+>>>>>>> 2a7603b459bafbd0d907068987a3612a18c6abb9
 }
 
 d3.csv("movies.csv", function(csv) {
