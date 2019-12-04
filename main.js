@@ -45,7 +45,6 @@ var brush = d3.brush()
    .on("end", brushEnd);
 
 function brushStart(attribute) {
-	document.getElementById('text').innerHTML ="";
     if (selectedChart !== attribute) {
         brush.move(d3.selectAll('.brush'), null);
     }
@@ -119,7 +118,50 @@ function createPieChart(selection, attribute) {
 			}
 		}
 	}
-	console.log(genreMap);
+	var pieWidth = 500;
+	var pieHeight = 500;
+	var pieRadius = 250;
+	var chartSpot = d3.select("#chartSpot")
+		.append("svg")
+			.attr("width", pieWidth)
+			.attr("height", pieHeight)
+			.append("g")
+			.attr("transform", "translate(" + pieWidth / 2 + "," + pieHeight / 2 + ")");
+	var color = d3.scaleOrdinal(d3.schemeSet2);
+	var pie = d3.pie();
+	var dataReady = pie(Array.from(genreMap.values()));
+	console.log(dataReady);
+	var arcGenerator = d3.arc()
+		.innerRadius(0)
+		.outerRadius(pieRadius)
+
+	chartSpot.selectAll('arc')
+		.data(dataReady)
+		.enter()
+		.append('path')
+			.attr('d', arcGenerator)
+			.attr('fill', function(d,i) {
+				return color(i);
+			})
+			.style("stroke", "black")
+			.style("stroke-width", "2px");
+
+	chartSpot.selectAll('arc')
+		.data(dataReady)
+		.enter()
+		.append('text')
+		.text(function(d,i) {
+			return Array.from(genreMap.keys())[i];
+		})
+		.each(function(d, i) {
+			var centroid = arcGenerator.centroid(d);
+			d3.select(this)
+				.attr('x', centroid[0])
+				.attr('y', centroid[1])
+				.attr('dy', '0.33em');
+		})
+		.style("text-anchor", "middle")
+		.style("font-size", 12);
 }
 
 d3.csv("movies.csv", function(csv) {
