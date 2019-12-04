@@ -80,12 +80,14 @@ function brushEnd(attribute) {
     if (!selection) {
         selectedChart = undefined;
         svg.selectAll('.dot').classed('selected', false);
+		d3.select("#chartSpot").html("");
     } else {
 		createPieChart(selection, attribute);
 	}
 }
 
 function createPieChart(selection, attribute) {
+	d3.select("#chartSpot").html("");
 	var [[left, top], [right, bottom]] = selection;
 	var movies = new Array();
 	genreMap = new Map();
@@ -120,9 +122,8 @@ function createPieChart(selection, attribute) {
 	}
 	var pieWidth = 500;
 	var pieHeight = 500;
-	var pieRadius = 250;
-	var chartSpot = d3.select("#chartSpot")
-		.append("svg")
+	var pieRadius = 225;
+	chartSpot = d3.select("#chartSpot").append("svg")
 			.attr("width", pieWidth)
 			.attr("height", pieHeight)
 			.append("g")
