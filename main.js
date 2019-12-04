@@ -26,13 +26,16 @@ var chartWidth = svgAvailableWidth  / 2;
 var chartHeight = svgAvailableHeight / 2;
 
 var chartAvailableWidth = chartWidth - chartPadding.l - chartPadding.r;
-var chartAvailableHeight = chartHeight - chartPadding.t - chartPadding.b;
+var chartAvailableHeight = chartHeight - chartPadding.t - chartPadding.b;\
 
-var xScale = d3.scaleLinear().range([0, chartAvailableWidth]);
-var yScale = d3.scaleLinear().range([chartAvailableHeight, 0]);
+var
 
-var xAxis = d3.axisBottom(xScale).ticks(6).tickSize(5, 0, 0);
-var yAxis = d3.axisLeft(yScale).ticks(6).tickSize(5, 0, 0);
+xScale = d3.scaleLinear().range([0, chartAvailableWidth])
+	.domain(d3.csv("movies.csv", function));
+yScale = d3.scaleLinear().range([chartAvailableHeight, 0]);
+
+xAxis = d3.axisBottom(xScale).ticks(6).tickSize(5, 0, 0);
+yAxis = d3.axisLeft(yScale).ticks(6).tickSize(5, 0, 0);
 
 var selectedChart = undefined;
 
@@ -45,7 +48,6 @@ var brush = d3.brush()
    .on("end", brushEnd);
 
 function brushStart(attribute) {
-	document.getElementById('text').innerHTML ="";
     if (selectedChart !== attribute) {
         brush.move(d3.selectAll('.brush'), null);
     }
@@ -84,45 +86,6 @@ function brushEnd() {
     }
 }
 
-// ** Update data section (Called from the onclick)
-function updateDataX(reset = false) {
-  // Get the data again
-  d3.csv("movies.csv", function(error, data) {
-    data.forEach(function(d) {
-      d.gross = Number(d.gross);
-      d.budget = Number(d.budget);
-    });
-
-    // Scale the range of the data again
-    if (!reset) {
-      xScale.domain([0, d3.select("#filterAxisX").node().value]);
-    } else {
-      xScale.domain(
-        d3.extent(data, function(d) {
-          return d.budget;
-        })
-      );
-    }
-    // Select the section we want to apply our changes to
-    var svg = d3.select("body").transition();
-    // Make the changes
-    d3.select("body")
-      .transition()
-      .duration(750)
-      .selectAll("circle")
-      .attr("cx", function(d) {
-        return xScale(d.budget);
-      })
-      .attr("cy", function(d) {
-        return yScale(d.gross);
-      });
-    svg
-      .select(".x.axis") // change the x axis
-      .duration(750)
-      .call(xAxis);
-  });
-}
-
 function updateDataY(reset = false) {
   // Get the data again
   d3.csv("movies.csv", function(error, data) {
@@ -145,15 +108,12 @@ function updateDataY(reset = false) {
     d3.select("body")
       .transition()
       .duration(750)
-      .selectAll("circle")
-      .attr("cx", function(d) {
-        return xScale(d.budget);
-      })
+      .selectAll(".dot")
       .attr("cy", function(d) {
-        return yScale(d.gross);
+        return yScale(d.gross) + chartPadding.t;
       });
     svg
-      .select(".y.axis") // change the x axis
+      .select(".y.axis") // change the y axis
       .duration(750)
       .call(yAxis);
   });
