@@ -89,7 +89,7 @@ function brushEnd(attribute) {
 function createPieChart(selection, attribute) {
 	var [[left, top], [right, bottom]] = selection;
 	var movies = new Array();
-	var genreMap = new Map();
+	genreMap = new Map();
 	var dots = svg.selectAll('.dot').classed('selected', function(d) {
 		var x = xScale(d[attribute]) + chartPadding.l;
 		var y = yScale(d['gross']) + chartPadding.t;
@@ -108,9 +108,18 @@ function createPieChart(selection, attribute) {
 		return left <= x && x <= right && top <= y && y <= bottom;
 	});
 	for (i = 0; i < movies.length; i++) {
-		
-		if (genreMap.has(movies[i].genres))
+		var splits = movies[i].genres.split('|');
+		for (j = 0; j < splits.length; j++) {
+			if (genreMap.has(splits[j])) {
+				var newNumber = genreMap.get(splits[j]) + 1;
+				genreMap.delete(splits[j]);
+				genreMap.set(splits[j], newNumber);
+			} else {
+				genreMap.set(splits[j], 1);
+			}
+		}
 	}
+	console.log(genreMap);
 }
 
 d3.csv("movies.csv", function(csv) {
