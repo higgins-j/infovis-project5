@@ -76,12 +76,41 @@ function brushMove(attribute) {
     }
 }
 
-function brushEnd() {
+function brushEnd(attribute) {
     var selection = d3.event.selection;
     if (!selection) {
         selectedChart = undefined;
         svg.selectAll('.dot').classed('selected', false);
-    }
+    } else {
+		createPieChart(selection, attribute);
+	}
+}
+
+function createPieChart(selection, attribute) {
+	var [[left, top], [right, bottom]] = selection;
+	var movies = new Array();
+	var genreMap = new Map();
+	var dots = svg.selectAll('.dot').classed('selected', function(d) {
+		var x = xScale(d[attribute]) + chartPadding.l;
+		var y = yScale(d['gross']) + chartPadding.t;
+		if (left <= x && x <= right && top <= y && y <= bottom) {
+			//get values of all movies selected here
+			var contains = 0;
+			for (i = 0; i < movies.length; i++) {
+				if (movies[i].title == d.title) {
+					contains = 1;
+				}
+			}
+			if (contains == 0) {
+				movies.push(d);
+			}
+		}
+		return left <= x && x <= right && top <= y && y <= bottom;
+	});
+	for (i = 0; i < movies.length; i++) {
+		
+		if (genreMap.has(movies[i].genres))
+	}
 }
 
 d3.csv("movies.csv", function(csv) {
