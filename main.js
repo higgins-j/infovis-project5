@@ -135,6 +135,30 @@ function createPieChart(selection, attribute) {
 			}
 		}
 	}
+
+    //word cloud
+    var word_dict = {};
+    for (i = 0; i < movies.length; i++) {
+      var words = movies[i]["plot_keywords"].split("|");
+      for (j = 0; j < words.length; j++) {
+        if (word_dict[words[j]] == undefined) {
+          word_dict[words[j]] = 1;
+        } else {
+          word_dict[words[j]] = word_dict[words[j]] + 1;
+        }
+      }
+    }
+
+    var frequency_list = [];
+
+    for (var key in word_dict) {
+      if (word_dict.hasOwnProperty(key)) {
+        frequency_list.push({ text: key, size: word_dict[key] });
+      }
+    }
+    draw_word_cloud(frequency_list);
+    //end word cloud
+
 	var pieWidth = 500;
 	var pieHeight = 500;
 	var pieRadius = 225;

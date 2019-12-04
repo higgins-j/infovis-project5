@@ -30,7 +30,7 @@ function draw_word_cloud(frequency_list) {
 }
 
 function draw(words) {
-  d3.selectAll("body")
+  d3.select("#wordSpot")
     .append("svg")
     .attr("width", 850)
     .attr("height", 350)
@@ -38,7 +38,7 @@ function draw(words) {
     .append("g")
     // without the transform, words words would get cutoff to the left and top, they would
     // appear outside of the SVG area
-    .attr("transform", "translate(320,200)")
+    .attr("transform", "translate(320,200) ")
     .selectAll("text")
     .data(words)
     .enter()
