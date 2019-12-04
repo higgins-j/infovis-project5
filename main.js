@@ -91,60 +91,6 @@ function brushMove(attribute) {
 }
 
 function brushEnd(attribute) {
-<<<<<<< HEAD
-  var selection = d3.event.selection;
-  if (!selection) {
-    selectedChart = undefined;
-    svg.selectAll(".dot").classed("selected", false);
-  } else {
-    createPieChart(selection, attribute);
-  }
-}
-
-function createPieChart(selection, attribute) {
-  var [[left, top], [right, bottom]] = selection;
-  var movies = new Array();
-  // genreMap = new Map();
-  var dots = svg.selectAll(".dot").classed("selected", function(d) {
-    var x = xScale(d[attribute]) + chartPadding.l;
-    var y = yScale(d["gross"]) + chartPadding.t;
-    if (left <= x && x <= right && top <= y && y <= bottom) {
-      //get values of all movies selected here
-      var contains = 0;
-      for (i = 0; i < movies.length; i++) {
-        if (movies[i].title == d.title) {
-          contains = 1;
-        }
-      }
-      if (contains == 0) {
-        movies.push(d);
-      }
-    }
-    return left <= x && x <= right && top <= y && y <= bottom;
-  });
-
-  var word_dict = {};
-  for (i = 0; i < movies.length; i++) {
-    var words = movies[i]["plot_keywords"].split("|");
-    for (j = 0; j < words.length; j++) {
-      if (word_dict[words[j]] == undefined) {
-        word_dict[words[j]] = 1;
-      } else {
-        word_dict[words[j]] = word_dict[words[j]] + 1;
-      }
-    }
-  }
-
-  //   console.log(word_dict);
-  var frequency_list = [];
-
-  for (var key in word_dict) {
-    if (word_dict.hasOwnProperty(key)) {
-      frequency_list.push({ text: key, size: word_dict[key] });
-    }
-  }
-  draw_word_cloud(frequency_list);
-=======
     var selection = d3.event.selection;
     if (!selection) {
         selectedChart = undefined;
@@ -232,7 +178,6 @@ function createPieChart(selection, attribute) {
 		})
 		.style("text-anchor", "middle")
 		.style("font-size", 12);
->>>>>>> 2a7603b459bafbd0d907068987a3612a18c6abb9
 }
 
 d3.csv("movies.csv", function(csv) {
