@@ -84,6 +84,81 @@ function brushEnd() {
     }
 }
 
+// ** Update data section (Called from the onclick)
+function updateDataX(reset = false) {
+  // Get the data again
+  d3.csv("movies.csv", function(error, data) {
+    data.forEach(function(d) {
+      d.gross = Number(d.gross);
+      d.budget = Number(d.budget);
+    });
+
+    // Scale the range of the data again
+    if (!reset) {
+      xScale.domain([0, d3.select("#filterAxisX").node().value]);
+    } else {
+      xScale.domain(
+        d3.extent(data, function(d) {
+          return d.budget;
+        })
+      );
+    }
+    // Select the section we want to apply our changes to
+    var svg = d3.select("body").transition();
+    // Make the changes
+    d3.select("body")
+      .transition()
+      .duration(750)
+      .selectAll("circle")
+      .attr("cx", function(d) {
+        return xScale(d.budget);
+      })
+      .attr("cy", function(d) {
+        return yScale(d.gross);
+      });
+    svg
+      .select(".x.axis") // change the x axis
+      .duration(750)
+      .call(xAxis);
+  });
+}
+
+function updateDataY(reset = false) {
+  // Get the data again
+  d3.csv("movies.csv", function(error, data) {
+    data.forEach(function(d) {
+      d.gross = Number(d.gross);
+      d.budget = Number(d.budget);
+    });
+
+    // Scale the range of the data again
+    if (!reset) yScale.domain([0, d3.select("#filterAxisY").node().value]);
+    else
+      yScale.domain(
+        d3.extent(data, function(d) {
+          return d.gross;
+        })
+      );
+    // Select the section we want to apply our changes to
+    var svg = d3.select("body").transition();
+    // Make the changes
+    d3.select("body")
+      .transition()
+      .duration(750)
+      .selectAll("circle")
+      .attr("cx", function(d) {
+        return xScale(d.budget);
+      })
+      .attr("cy", function(d) {
+        return yScale(d.gross);
+      });
+    svg
+      .select(".y.axis") // change the x axis
+      .duration(750)
+      .call(yAxis);
+  });
+}
+
 d3.csv("movies.csv", function(csv) {
     for (var i=0; i<csv.length; ++i) {
 		csv[i].director = String(csv[i].director_name);

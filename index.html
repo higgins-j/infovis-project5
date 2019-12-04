@@ -6,7 +6,38 @@
   </head>
   <body>
       <div id="main" />
-      <div id="text" />
+	  <div id="option">
+	    <p>Filter for x axis:
+	    <input id="filterAxisX"></input>
+	    <input
+	      name="updateButton"
+	      type="button"
+	      value="Filter"
+	      onclick="updateDataX()"
+	    />
+	    <input
+	    name="updateButton"
+	    type="button"
+	    value="Reset"
+	    onclick="document.getElementById('filterAxisX').value = ''; updateDataX(true);"
+	  />
+	  <div id="option">
+	        <p>Filter for y axis:
+	        <input id="filterAxisY"></input>
+	        <input
+	          name="updateButton"
+	          type="button"
+	          value="Filter"
+	          onclick="updateDataY()"
+	        />
+	        <input
+	        name="updateButton"
+	        type="button"
+	        value="Reset"
+	        onclick="document.getElementById('filterAxisY').value = ''; updateDataY(true);"
+	      />
+	    </p>
+	  </div>
       <script src="https://d3js.org/d3.v4.min.js"></script>
       <script type="text/javascript" src="main.js"></script>
 	  </body>
