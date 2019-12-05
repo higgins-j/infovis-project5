@@ -1,7 +1,7 @@
 var width = 1000;
 var height = 1000;
 var padding = { t: 0, r: 0, b: 0, l: 0 };
-var chartPadding = { t: 40, r: 40, b: 60, l: 50 };
+var chartPadding = { t: 40, r: 40, b: 60, l: 70 };
 
 var svgAvailableWidth = width - padding.l - padding.r;
 var svgAvailableHeight = height - padding.t - padding.b;
@@ -233,6 +233,21 @@ function createPieChart(selection, attribute) {
     .style("font-size", 12);
 }
 
+var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([12, 0])
+    .html(function(d) {
+		var htmlString = `<h5>${d['title']}</h5>`;
+		htmlString = htmlString + `<table><thead><tr><td>Gross</td><td>Budget</td></tr></thead>`;
+		htmlString = htmlString + `<tbody><tr><td>$${d['gross']}</td>&nbsp;<td>$${d['budget']}</td></tr></tbody></table>`
+        htmlString = htmlString + `<table><thead><tr><td>Director</td><td>Star</td></tr></thead>`;
+		htmlString = htmlString + `<tbody><tr><td>${d['director']}</td>&nbsp;<td>${d['actor_1_name']}</td></tr></tbody></table>`
+		return htmlString;
+    });
+
+svg.call(toolTip);
+
+
 d3.csv("movies.csv", function(csv) {
   for (var i = 0; i < csv.length; ++i) {
     csv[i].director = String(csv[i].director_name);
@@ -278,7 +293,8 @@ d3.csv("movies.csv", function(csv) {
   chartEnter
     .append("g")
     .attr("class", "brush")
-    .call(brush);
+    .call(brush)
+    .on("click", toolTip.hide);
 
   chartEnter.each(function(attribute) {
     xScale.domain(
@@ -305,6 +321,8 @@ d3.csv("movies.csv", function(csv) {
       .attr("class", "dot")
       .style("stroke", "black")
       .attr("r", 3);
+
+      dotsEnter.on('click', toolTip.show)
 
     dots
       .merge(dotsEnter)
