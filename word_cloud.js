@@ -52,7 +52,6 @@ var colorArray = [
 ];
 
 function draw_word_cloud(frequency_list) {
-  console.log("draw");
   d3.layout
     .cloud()
     .size([800, 300])
