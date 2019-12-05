@@ -57,7 +57,10 @@ function draw_word_cloud(frequency_list) {
     .cloud()
     .size([800, 300])
     .words(frequency_list)
-    .rotate(0)
+    .rotate(function(d) {
+      var dir = Math.random() > 0.5 ? 1 : -1;
+      return Math.random() * 20 * dir;
+    })
     .fontSize(function(d) {
       return d.size;
     })
