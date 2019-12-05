@@ -96,6 +96,7 @@ function brushEnd(attribute) {
     selectedChart = undefined;
     svg.selectAll(".dot").classed("selected", false);
     d3.select("#chartSpot").html("");
+    d3.select("#wordSpot").html("");
   } else {
     createPieChart(selection, attribute);
   }
